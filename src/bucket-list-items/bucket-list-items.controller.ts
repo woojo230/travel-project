@@ -15,7 +15,7 @@ import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.deco
 import { CreateBucketListItemDto } from './dto/create-bucket-list-item.dto';
 import { UpdateBucketListItemDto } from './dto/update-bucket-list-item.dto';
 
-@Controller('bucket-list-items')
+@Controller('bucket-lists')
 export class BucketListItemsController {
   constructor(
     private readonly bucketListItemsService: BucketListItemsService,

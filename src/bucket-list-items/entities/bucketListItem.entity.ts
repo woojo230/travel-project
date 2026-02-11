@@ -13,6 +13,8 @@ export class BucketListItem {
   @ManyToOne(() => BucketList, (bucketList) => bucketList.items)
   bucketList: BucketList;
 
-  @ManyToOne(() => Destination, (destination) => destination.bucketListItem)
+  @ManyToOne(() => Destination, (destination) => destination.bucketListItem, {
+    eager: true,
+  })
   destination: Destination;
 }
