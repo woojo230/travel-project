@@ -22,7 +22,7 @@ export class BucketListsService {
   async create(
     userId: string,
     model: CreateBucketListDto,
-  ): Promise<BucketList> {
+  ): Promise<Partial<BucketList>> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -51,7 +51,7 @@ export class BucketListsService {
 
     await this.bucketListRepository.save(newBucketList);
 
-    return { ...newBucketList };
+    return { ...newBucketList, user: undefined };
   }
 
   async findById(userId: string, id: number): Promise<BucketList> {
