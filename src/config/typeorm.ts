@@ -1,5 +1,10 @@
 import { registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || 'local'}`,
+});
 
 const config = {
   type: 'postgres',
