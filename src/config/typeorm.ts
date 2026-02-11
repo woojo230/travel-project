@@ -6,6 +6,9 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV || 'local'}`,
 });
 
+console.log('현재 환경:', process.env.NODE_ENV);
+console.log('DB 유저명:', process.env.DB_USERNAME);
+
 const config: any = {
   type: 'postgres',
   host: `${process.env.DB_HOST || 'localhost'}`,
@@ -17,7 +20,6 @@ const config: any = {
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false,
-  ssl: true,
 };
 
 if (process.env.NODE_ENV === 'production') {
