@@ -16,7 +16,7 @@ export class DestinationsService {
   ) {}
 
   async create(model: CreateDestinationDto): Promise<Destination> {
-    const existingDestination = await this.destinationsRepository.findBy({
+    const existingDestination = await this.destinationsRepository.findOneBy({
       name: model.name,
     });
 
@@ -47,10 +47,10 @@ export class DestinationsService {
   async remove(id: number): Promise<void> {
     const existingDestination = await this.findById(id);
 
-    if (existingDestination) {
-      await this.destinationsRepository.delete(id);
+    if (!existingDestination) {
+      throw new NotFoundException('존재하지 않는 여행지 입니다.');
     }
 
-    throw new NotFoundException('존재하지 않는 여행지 입니다.');
+    await this.destinationsRepository.delete(id);
   }
 }
