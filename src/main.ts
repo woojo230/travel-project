@@ -8,7 +8,12 @@ if (!global.crypto) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env.NODE_ENV === 'production'
+        ? ['error', 'warn']
+        : ['log', 'error', 'warn', 'debug'],
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

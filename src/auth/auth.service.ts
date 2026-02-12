@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -18,6 +19,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
+
+  private readonly logger = new Logger(AuthService.name);
 
   private async hashFn(data: string): Promise<string> {
     return argon2.hash(data);
@@ -87,6 +90,7 @@ export class AuthService {
     const existUser = await this.userService.findByUserName(data.username);
 
     if (existUser) {
+      this.logger.error(`${data.username}으로 이미 가입된 계정이 있습니다.`);
       throw new BadRequestException(
         `${data.username}으로 가입된 계정이 존재합니다`,
       );
@@ -101,6 +105,10 @@ export class AuthService {
 
     const tokens = await this.getTokens(newUser);
     await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+
+    this.logger.log(
+      `[유저 회원가입 완료] ID: ${newUser.id}, 유저 이름 : ${newUser.username}`,
+    );
 
     return tokens;
   }
