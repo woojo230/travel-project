@@ -11,6 +11,7 @@ import {
 import { DestinationsService } from './destinations.service';
 import { CreateDestinationDto } from './dto/create-destination.dto';
 import { SearchDto } from './dto/search-destination.dto';
+import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('destinations')
 export class DestinationsController {
@@ -27,6 +28,8 @@ export class DestinationsController {
   }
 
   @Get('search')
+  @CacheKey('search')
+  @CacheTTL(1000 * 10)
   async searchDestinations(@Query() query: SearchDto) {
     return this.destinationsService.search(query.q);
   }

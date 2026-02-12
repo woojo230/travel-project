@@ -9,6 +9,8 @@ import { BucketListsModule } from './bucket-lists/bucket-lists.module';
 import { BucketListItemsModule } from './bucket-list-items/bucket-list-items.module';
 import { AuthModule } from './auth/auth.module';
 import typeorm from './config/typeorm';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -22,6 +24,9 @@ import typeorm from './config/typeorm';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm') || {},
     }),
+    CacheModule.register({
+      isGlobal: true,
+    }),
     UsersModule,
     DestinationsModule,
     BucketListsModule,
@@ -29,6 +34,12 @@ import typeorm from './config/typeorm';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
 })
 export class AppModule {}
