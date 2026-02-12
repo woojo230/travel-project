@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Destination } from './entities/destination.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDestinationDto } from './dto/create-destination.dto';
@@ -52,5 +52,21 @@ export class DestinationsService {
     }
 
     await this.destinationsRepository.delete(id);
+  }
+
+  async search(q: string): Promise<Destination[]> {
+    const results = await this.destinationsRepository.find({
+      where: {
+        name: Like(`%${q}%`),
+      },
+    });
+
+    if (results.length === 0) {
+      throw new NotFoundException(
+        `'${q}'에 해당하는 목적지를 찾을 수 없습니다.`,
+      );
+    }
+
+    return results;
   }
 }

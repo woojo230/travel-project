@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { DestinationsService } from './destinations.service';
 import { CreateDestinationDto } from './dto/create-destination.dto';
@@ -22,6 +23,11 @@ export class DestinationsController {
   @Get('')
   async findAllDestinations() {
     return this.destinationsService.findAll();
+  }
+
+  @Get('search')
+  async searchDestinations(@Query('q') q: string) {
+    return this.destinationsService.search(q);
   }
 
   @Get(':id')
