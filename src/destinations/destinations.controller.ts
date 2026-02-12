@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { DestinationsService } from './destinations.service';
 import { CreateDestinationDto } from './dto/create-destination.dto';
+import { SearchDto } from './dto/search-destination.dto';
 
 @Controller('destinations')
 export class DestinationsController {
@@ -26,8 +27,8 @@ export class DestinationsController {
   }
 
   @Get('search')
-  async searchDestinations(@Query('q') q: string) {
-    return this.destinationsService.search(q);
+  async searchDestinations(@Query() query: SearchDto) {
+    return this.destinationsService.search(query.q);
   }
 
   @Get(':id')
